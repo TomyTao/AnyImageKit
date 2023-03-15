@@ -6,7 +6,7 @@
   Copyright © 2019-2022 AnyImageKit.org. All rights reserved.
 */
 
-"ORIGINAL_IMAGE" = "原图";
+"AUTO_DESTORY" = "查看后自焚";
 "SELECT_PHOTO" = "选中图片";
 "UNSELECT_PHOTO" = "未选中图片";
 "TAKE_PHOTO" = "拍照";

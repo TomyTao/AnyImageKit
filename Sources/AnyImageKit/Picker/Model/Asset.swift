@@ -17,7 +17,7 @@ public class Asset: IdentifiableResource {
     
     var _images: [ImageKey: UIImage] = [:]
     var videoDidDownload: Bool = false
-    
+    public var isFire : Bool = false
     var idx: Int
     var state: State = .unchecked
     var selectedNum: Int = 1

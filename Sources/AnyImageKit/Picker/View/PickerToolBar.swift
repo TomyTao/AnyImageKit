@@ -27,16 +27,11 @@ final class PickerToolBar: UIView {
         return view
     }()
     
-    private(set) lazy var originalButton: UIButton = {
-        let view = UIButton(frame: .zero)
-        view.titleLabel?.font = UIFont.systemFont(ofSize: 16)
-        let spacing: CGFloat = 8
-        view.imageEdgeInsets = UIEdgeInsets(top: 0, left: -spacing/2, bottom: 0, right: spacing/2)
-        view.titleEdgeInsets = UIEdgeInsets(top: 0, left: spacing/2, bottom: 0, right: -spacing/2)
-        view.contentEdgeInsets = UIEdgeInsets(top: 0, left: spacing, bottom: 0, right: spacing)
+    private(set) lazy var fireButton: FireButton = {
+        let view = FireButton(frame: .zero)
         return view
     }()
-    
+
     private(set) lazy var doneButton: UIButton = {
         let view = UIButton(type: .custom)
         view.clipsToBounds = true
@@ -84,7 +79,7 @@ final class PickerToolBar: UIView {
         
         addSubview(contentView)
         contentView.addSubview(leftButton)
-        contentView.addSubview(originalButton)
+        contentView.addSubview(fireButton)
         contentView.addSubview(doneButton)
         
         contentView.snp.makeConstraints { maker in
@@ -96,7 +91,7 @@ final class PickerToolBar: UIView {
             maker.centerY.equalToSuperview()
             maker.height.equalTo(30)
         }
-        originalButton.snp.makeConstraints { maker in
+        fireButton.snp.makeConstraints { maker in
             maker.centerX.equalToSuperview()
             maker.centerY.equalToSuperview()
             maker.height.equalTo(30)
@@ -133,25 +128,25 @@ extension PickerToolBar: PickerOptionsConfigurable {
                                       dark: options.theme[color: .text].withAlphaComponent(0.3))
         doneButton.setTitleColor(normal, for: .normal)
         doneButton.setTitleColor(disabled, for: .disabled)
-        originalButton.setImage(options.theme[icon: .checkOn], for: .selected)
-        originalButton.setImage(options.theme[icon: .checkOff], for: .normal)
-        originalButton.setTitleColor(options.theme[color: .text], for: .selected)
-        originalButton.setTitleColor(options.theme[color: .text], for: .normal)
-        originalButton.tintColor = options.theme[color: .primary]
-        originalButton.isHidden = !options.allowUseOriginalImage
+//        fireButton.setImage(options.theme[icon: .checkOn], for: .selected)
+//        fireButton.setImage(options.theme[icon: .checkOff], for: .normal)
+//        fireButton.setTitleColor(options.theme[color: .text], for: .selected)
+//        fireButton.setTitleColor(options.theme[color: .text], for: .normal)
+//        fireButton.tintColor = options.theme[color: .primary]
+        fireButton.isHidden = !options.allowUseFireImage
         updateChildrenConfigurable(options: options)
         
-        originalButton.setTitle(options.theme[string: .pickerOriginalImage], for: .normal)
+//        fireButton.setTitle(options.theme[string: .pickerOriginalImage], for: .normal)
         doneButton.setTitle(options.theme[string: .done], for: .normal)
         
         switch style {
         case .picker:
             options.theme.buttonConfiguration[.preview]?.configuration(leftButton)
-            options.theme.buttonConfiguration[.originalImage]?.configuration(originalButton)
+//            options.theme.buttonConfiguration[.originalImage]?.configuration(fireButton)
             options.theme.buttonConfiguration[.done]?.configuration(doneButton)
         case .preview:
             options.theme.buttonConfiguration[.edit]?.configuration(leftButton)
-            options.theme.buttonConfiguration[.originalImage]?.configuration(originalButton)
+//            options.theme.buttonConfiguration[.originalImage]?.configuration(fireButton)
             options.theme.buttonConfiguration[.done]?.configuration(doneButton)
         }
     }
@@ -162,10 +157,6 @@ extension PickerToolBar {
     
     func setEnable(_ enable: Bool) {
         leftButton.isEnabled = enable
-        setDoneEnable(enable)
-    }
-    
-    func setDoneEnable(_ enable: Bool) {
         doneButton.isEnabled = enable
         doneButton.alpha = enable ? 1.0 : 0.5
     }

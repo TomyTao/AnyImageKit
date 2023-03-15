@@ -28,7 +28,6 @@ open class ImagePickerController: AnyImageNavigationController {
     
     private var containerSize: CGSize = .zero
     private var didFinishSelect: Bool = false
-    private var didCallback: Bool = false
     private let workQueue = DispatchQueue.init(label: "org.AnyImageKit.DispatchQueue.ImagePickerController")
     
     private let manager: PickerManager = .init()
@@ -200,10 +199,8 @@ extension ImagePickerController {
                 DispatchQueue.main.async { [weak self] in
                     guard let self = self else { return }
                     self.view.hud.hide()
-                    let result = PickerResult(assets: newAssets, useOriginalImage: self.manager.useOriginalImage)
-                    guard self.didCallback == false else { return }
+                    let result = PickerResult(assets: newAssets, useFireImage: self.manager.useFireImage)
                     self.pickerDelegate?.imagePicker(self, didFinishPicking: result)
-                    self.didCallback = true
                 }
             }
         }
@@ -241,7 +238,7 @@ extension ImagePickerController {
     }
     
     private func resizeImagesIfNeeded(_ assets: [Asset]) {
-        if !manager.useOriginalImage {
+        if !manager.useFireImage {
             let limitSize = CGSize(width: manager.options.photoMaxWidth,
                                    height: manager.options.photoMaxWidth)
             assets.forEach {
@@ -290,15 +287,13 @@ extension ImagePickerController {
     }
     
     @objc private func didSyncAsset(_ sender: Notification) {
-        DispatchQueue.main.async {
-            if self.didFinishSelect {
-                if let message = sender.object as? String {
-                    self.didFinishSelect = false
-                    self.view.hud.hide()
-                    Toast.show(message: message)
-                } else {
-                    self.checkData()
-                }
+        if didFinishSelect {
+            if let message = sender.object as? String {
+                didFinishSelect = false
+                view.hud.hide()
+                Toast.show(message: message)
+            } else {
+                checkData()
             }
         }
     }

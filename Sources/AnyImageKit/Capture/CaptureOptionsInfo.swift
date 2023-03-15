@@ -69,6 +69,10 @@ public struct CaptureOptionsInfo {
     public var editorVideoOptions: EditorVideoOptionsInfo = .init()
     #endif
     
+    /// Allow Use Fire Image
+    /// - Default: false
+    public var allowUseFireImage: Bool = false
+    
     public init() { }
 }
 

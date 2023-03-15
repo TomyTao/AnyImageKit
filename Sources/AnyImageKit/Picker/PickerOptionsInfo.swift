@@ -36,9 +36,9 @@ public struct PickerOptionsInfo {
     /// - Default: 1800
     public var largePhotoMaxWidth: CGFloat = 1800
     
-    /// Allow Use Original Image
+    /// Allow Use Fire Image
     /// - Default: false
-    public var allowUseOriginalImage: Bool = false
+    public var allowUseFireImage: Bool = false
     
     /// Album Options
     /// - Default: smart album + user create album
@@ -64,10 +64,6 @@ public struct PickerOptionsInfo {
     /// Disable Rules
     /// - Default: []
     public var disableRules: [AssetDisableCheckRule] = []
-	
-	/// Clear all selected assets after switching album
-	/// - Default: false
-	public var clearSelectionAfterSwitchingAlbum: Bool = false
     
     /// Enable Debug Log
     /// - Default: false

@@ -17,8 +17,11 @@ public struct CaptureResult: Equatable {
     /// Media type
     public let type: MediaType
     
-    init(mediaURL: URL, type: MediaType) {
+    public let useFireImage: Bool
+
+    init(mediaURL: URL, type: MediaType, useFireImage: Bool) {
         self.mediaURL = mediaURL
         self.type = type
+        self.useFireImage = useFireImage
     }
 }

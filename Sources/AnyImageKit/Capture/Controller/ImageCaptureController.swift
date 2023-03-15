@@ -90,8 +90,8 @@ extension ImageCaptureController: CaptureViewControllerDelegate {
         captureDelegate?.imageCaptureDidCancel(self)
     }
     
-    func capture(_ capture: CaptureViewController, didOutput mediaURL: URL, type: MediaType) {
-        let result = CaptureResult(mediaURL: mediaURL, type: type)
+    func capture(_ capture: CaptureViewController, didOutput mediaURL: URL, type: MediaType, isFire: Bool) {
+        let result = CaptureResult(mediaURL: mediaURL, type: type, useFireImage: isFire)
         captureDelegate?.imageCapture(self, didFinishCapturing: result)
     }
 }
@@ -104,7 +104,7 @@ extension ImageCaptureController: PadCaptureViewControllerDelegate {
     }
     
     func capture(_ capture: PadCaptureViewController, didOutput mediaURL: URL, type: MediaType) {
-        let result = CaptureResult(mediaURL: mediaURL, type: type)
+        let result = CaptureResult(mediaURL: mediaURL, type: type, useFireImage: false)
         captureDelegate?.imageCapture(self, didFinishCapturing: result)
     }
 }

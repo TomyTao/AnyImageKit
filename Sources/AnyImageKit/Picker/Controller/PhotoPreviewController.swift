@@ -19,9 +19,6 @@ protocol PhotoPreviewControllerDataSource: AnyObject {
     /// 获取索引对应的数据模型
     func previewController(_ controller: PhotoPreviewController, assetOfIndex index: Int) -> PreviewData
     
-	/// 获取数据模型
-	func previewController(_ controller: PhotoPreviewController, asset: Asset) -> PreviewData?
-	
     /// 获取转场动画时的缩略图所在的 view
     func previewController(_ controller: PhotoPreviewController, thumbnailViewForIndex index: Int) -> UIView?
 }
@@ -56,11 +53,6 @@ extension PhotoPreviewControllerDelegate {
 }
 
 final class PhotoPreviewController: AnyImageViewController, PickerOptionsConfigurable {
-    
-    enum SourceType {
-        case album
-        case selectedAssets
-    }
     
     weak var delegate: PhotoPreviewControllerDelegate?
     weak var dataSource: PhotoPreviewControllerDataSource?
@@ -119,28 +111,27 @@ final class PhotoPreviewController: AnyImageViewController, PickerOptionsConfigu
     }()
     private(set) lazy var toolBar: PickerToolBar = {
         let view = PickerToolBar(style: .preview)
-        view.originalButton.isSelected = manager.useOriginalImage
+        view.fireButton.isSelected = manager.useFireImage
         view.leftButton.isHidden = true
         #if ANYIMAGEKIT_ENABLE_EDITOR
         view.leftButton.addTarget(self, action: #selector(editButtonTapped(_:)), for: .touchUpInside)
         #endif
-        view.originalButton.addTarget(self, action: #selector(originalImageButtonTapped(_:)), for: .touchUpInside)
+        view.fireButton.addTarget(self, action: #selector(originalImageButtonTapped(_:)), for: .touchUpInside)
         view.doneButton.addTarget(self, action: #selector(doneButtonTapped(_:)), for: .touchUpInside)
         return view
     }()
     private lazy var indexView: PickerPreviewIndexView = {
-        let view = PickerPreviewIndexView(manager: manager, sourceType: sourceType)
+        let view = PickerPreviewIndexView(frame: .zero)
+        view.setManager(manager)
         view.isHidden = true
         view.delegate = self
         return view
     }()
     
     let manager: PickerManager
-    let sourceType: SourceType
     
-    init(manager: PickerManager, sourceType: SourceType) {
+    init(manager: PickerManager) {
         self.manager = manager
-        self.sourceType = sourceType
         super.init(nibName: nil, bundle: nil)
         transitioningDelegate = self
         modalPresentationStyle = .custom
@@ -336,10 +327,10 @@ extension PhotoPreviewController {
         guard let data = dataSource?.previewController(self, assetOfIndex: currentIndex) else { return }
         navigationBar.selectButton.isEnabled = true
         navigationBar.selectButton.setNum(data.asset.selectedNum, isSelected: data.asset.isSelected, animated: false)
-        indexView.currentAsset = data.asset
+        indexView.currentIndex = currentIndex
         
-        if manager.options.allowUseOriginalImage {
-            toolBar.originalButton.isHidden = data.asset.phAsset.mediaType != .image
+        if manager.options.allowUseFireImage {
+            toolBar.fireButton.isHidden = data.asset.phAsset.mediaType != .image
         }
         #if ANYIMAGEKIT_ENABLE_EDITOR
         autoSetEditorButtonHidden()
@@ -388,20 +379,16 @@ extension PhotoPreviewController {
         navigationBar.selectButton.setNum(data.asset.selectedNum, isSelected: data.asset.isSelected, animated: true)
         indexView.didChangeSelectedAsset()
         trackObserver?.track(event: .pickerSelect, userInfo: [.isOn: data.asset.isSelected, .page: AnyImagePage.pickerPreview])
-        
-        if sourceType == .selectedAssets {
-            toolBar.setDoneEnable(!manager.selectedAssets.isEmpty)
-        }
     }
     
     /// ToolBar - Original
     @objc private func originalImageButtonTapped(_ sender: UIButton) {
         sender.isSelected.toggle()
-        manager.useOriginalImage = sender.isSelected
+        manager.useFireImage = sender.isSelected
         delegate?.previewController(self, useOriginalImage: sender.isSelected)
         
         // 选择当前照片
-        if manager.useOriginalImage && !manager.isUpToLimit {
+        if manager.useFireImage && !manager.isUpToLimit {
             guard let data = dataSource?.previewController(self, assetOfIndex: currentIndex) else { return }
             if !data.asset.isSelected {
                 selectButtonTapped(navigationBar.selectButton)
@@ -579,21 +566,9 @@ extension PhotoPreviewController: PreviewCellDelegate {
 // MARK: - PickerPreviewIndexViewDelegate
 extension PhotoPreviewController: PickerPreviewIndexViewDelegate {
     
-	func pickerPreviewIndexView(_ view: PickerPreviewIndexView, didSelect asset: Asset) {
-        switch sourceType {
-        case .album:
-            guard let currentAsset = dataSource?.previewController(self, asset: asset)?.asset else {
-                Toast.show(message: manager.options.theme[string: .pickerCannotPreviewAssetInOtherAlbum])
-                return
-            }
-            currentIndex = currentAsset.idx
-            collectionView.scrollToItem(at: IndexPath(item: currentAsset.idx, section: 0), at: .left, animated: false)
-        case .selectedAssets:
-            guard let index = manager.selectedAssets.firstIndex(of: asset) else { return }
-            currentIndex = index
-            collectionView.scrollToItem(at: IndexPath(item: index, section: 0), at: .left, animated: false)
-        }
-        
+    func pickerPreviewIndexView(_ view: PickerPreviewIndexView, didSelect idx: Int) {
+        currentIndex = idx
+        collectionView.scrollToItem(at: IndexPath(item: idx, section: 0), at: .left, animated: false)
         #if ANYIMAGEKIT_ENABLE_EDITOR
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
             self?.autoSetEditorButtonHidden()
@@ -612,11 +587,7 @@ extension PhotoPreviewController: UIViewControllerTransitioningDelegate {
         collectionView.reloadData()
         collectionView.scrollToItem(at: indexPath, at: .left, animated: false)
         collectionView.layoutIfNeeded()
-        if relatedView != nil {
-            return makeScalePresentationAnimator(indexPath: indexPath)
-        } else {
-            return nil
-        }
+        return makeScalePresentationAnimator(indexPath: indexPath)
     }
     
     /// 提供退场动画

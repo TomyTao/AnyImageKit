@@ -181,9 +181,7 @@ extension AssetCell {
             }
         }
         
-        if isPreview {
-            selectdCoverView.isHidden = asset.isSelected
-        } else {
+        if !isPreview {
             selectButton.setNum(asset.selectedNum, isSelected: asset.isSelected, animated: animated)
             selectdCoverView.isHidden = !asset.isSelected
             if asset.isDisable {

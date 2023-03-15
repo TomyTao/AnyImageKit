@@ -12,7 +12,7 @@ import Photos
 protocol VideoEditorControllerDelegate: AnyObject {
     
     func videoEditorDidCancel(_ editor: VideoEditorController)
-    func videoEditor(_ editor: VideoEditorController, didFinishEditing video: URL, isEdited: Bool)
+    func videoEditor(_ editor: VideoEditorController, didFinishEditing video: URL, isEdited: Bool, isFire: Bool)
 }
 
 final class VideoEditorController: AnyImageViewController {
@@ -171,7 +171,7 @@ extension VideoEditorController {
         let isEdited = end - start != 1
         if let url = resource as? URL, !isEdited {
             _print("Export video at \(url)")
-            delegate?.videoEditor(self, didFinishEditing: url, isEdited: isEdited)
+            delegate?.videoEditor(self, didFinishEditing: url, isEdited: isEdited, isFire: toolView.fireButton.isSelected)
             trackObserver?.track(event: .editorDone, userInfo: [.page: AnyImagePage.editorVideo])
             return
         }
@@ -180,7 +180,7 @@ extension VideoEditorController {
             switch result {
             case .success(let url):
                 _print("Export video at \(url)")
-                self.delegate?.videoEditor(self, didFinishEditing: url, isEdited: isEdited)
+                self.delegate?.videoEditor(self, didFinishEditing: url, isEdited: isEdited, isFire: self.toolView.fireButton.isSelected)
                 self.trackObserver?.track(event: .editorDone, userInfo: [.page: AnyImagePage.editorVideo])
             case .failure(let error):
                 _print(error.localizedDescription)

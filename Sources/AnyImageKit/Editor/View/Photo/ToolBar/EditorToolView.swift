@@ -37,7 +37,12 @@ final class EditorToolView: UIView {
         view.layer.endPoint = CGPoint(x: 0.5, y: 0)
         return view
     }()
-    
+    private(set) lazy var fireButton: FireButton = {
+        let view = FireButton(frame: .zero)
+        view.label.textColor = .white
+        view.addTarget(self, action: #selector(handleClickFire), for: .touchUpInside)
+        return view
+    }()
     private(set) lazy var editOptionsView: EditorEditOptionsView = {
         let view = EditorEditOptionsView(frame: .zero, options: options)
         view.delegate = self
@@ -98,7 +103,16 @@ final class EditorToolView: UIView {
         addSubview(cropToolView)
         addSubview(mosaicToolView)
         addSubview(doneButton)
-        
+        if options.allowUseFireImage == true {
+            addSubview(fireButton)
+            fireButton.snp.makeConstraints { make in
+                make.height.equalTo(30)
+//                make.right.equalToSuperview()
+                make.centerY.equalTo(editOptionsView)
+                make.right.equalTo(doneButton.snp.left).offset(-10)
+            }
+        }
+
         topCoverView.snp.makeConstraints { maker in
             maker.top.left.right.equalToSuperview()
             if #available(iOS 11.0, *) {
@@ -113,7 +127,11 @@ final class EditorToolView: UIView {
         }
         editOptionsView.snp.makeConstraints { maker in
             maker.left.equalToSuperview()
-            maker.right.equalTo(doneButton.snp.left).offset(-20).priority(.low)
+            if self.subviews.contains(fireButton) == true {
+                maker.right.equalTo(fireButton.snp.left).offset(-20).priority(.low)
+            }else{
+                maker.right.equalTo(doneButton.snp.left).offset(-20)
+            }
             if #available(iOS 11.0, *) {
                 maker.bottom.equalTo(safeAreaLayoutGuide).offset(-14)
             } else {
@@ -138,9 +156,13 @@ final class EditorToolView: UIView {
             maker.centerY.equalTo(editOptionsView)
             maker.right.equalToSuperview().offset(-20)
         }
-        
         options.theme.buttonConfiguration[.done]?.configuration(doneButton)
     }
+    
+    @objc func handleClickFire() {
+        fireButton.isSelected.toggle()
+    }
+    
 }
 
 // MARK: - Public
@@ -171,6 +193,14 @@ extension EditorToolView: EditorEditOptionsViewDelegate {
     
     func editOptionsView(_ editOptionsView: EditorEditOptionsView, optionWillChange option: EditorPhotoToolOption?) -> Bool {
         let result = context.action(.toolOptionChanged(option))
+        switch option {
+        case .crop:
+            fireButton.isHidden = true
+            break
+        default:
+            fireButton.isHidden = false
+            break
+        }
         guard result else { return false }
         
         guard let option = option else {
@@ -197,6 +227,7 @@ extension EditorToolView: EditorEditOptionsViewDelegate {
         }
         return true
     }
+    
 }
 
 // MARK: - EditorBrushToolViewDelegate
@@ -236,6 +267,7 @@ extension EditorToolView: EditorCropToolViewDelegate {
         editOptionsView.isHidden = false
         topCoverView.isHidden = false
         doneButton.isHidden = false
+        fireButton.isHidden = false
         cropToolView.isHidden = true
         editOptionsView.unselectButtons()
     }
@@ -246,6 +278,7 @@ extension EditorToolView: EditorCropToolViewDelegate {
         editOptionsView.isHidden = false
         topCoverView.isHidden = false
         doneButton.isHidden = false
+        fireButton.isHidden = false
         cropToolView.isHidden = true
         editOptionsView.unselectButtons()
     }
@@ -266,7 +299,7 @@ extension EditorToolView {
         if isHidden || !isUserInteractionEnabled || alpha < 0.01 {
             return nil
         }
-        let subViews = [editOptionsView, brushToolView, cropToolView, mosaicToolView, doneButton]
+        let subViews = [editOptionsView, brushToolView, cropToolView, mosaicToolView, doneButton, fireButton]
         for subView in subViews {
             if let hitView = subView.hitTest(subView.convert(point, from: self), with: event) {
                 return hitView

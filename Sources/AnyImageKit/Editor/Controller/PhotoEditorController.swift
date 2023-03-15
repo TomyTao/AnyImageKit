@@ -11,7 +11,7 @@ import UIKit
 protocol PhotoEditorControllerDelegate: AnyObject {
     
     func photoEditorDidCancel(_ editor: PhotoEditorController)
-    func photoEditor(_ editor: PhotoEditorController, didFinishEditing photo: UIImage, isEdited: Bool)
+    func photoEditor(_ editor: PhotoEditorController, didFinishEditing photo: UIImage, isEdited: Bool, isFire: Bool)
 }
 
 final class PhotoEditorController: AnyImageViewController {
@@ -32,6 +32,9 @@ final class PhotoEditorController: AnyImageViewController {
         view.brushToolView.undoButton.isEnabled = stack.edit.canvasCanUndo
         view.mosaicToolView.undoButton.isEnabled = stack.edit.mosaicCanUndo
         view.cropToolView.currentOptionIdx = stack.edit.cropData.cropOptionIdx
+        if options.allowUseFireImage == false {
+            view.fireButton.removeFromSuperview()
+        }
         return view
     }()
     private lazy var backButton: UIButton = {
@@ -340,7 +343,7 @@ extension PhotoEditorController {
             setPlaceholdImage(image)
             stack.setOutputImage(image)
             saveEditPath()
-            delegate?.photoEditor(self, didFinishEditing: image, isEdited: stack.edit.isEdited)
+            delegate?.photoEditor(self, didFinishEditing: image, isEdited: stack.edit.isEdited, isFire: toolView.fireButton.isSelected)
             trackObserver?.track(event: .editorDone, userInfo: [.page: AnyImagePage.editorPhoto])
         case .toolOptionChanged(let option):
             context.toolOption = option

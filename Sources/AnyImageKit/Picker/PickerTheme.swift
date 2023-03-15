@@ -217,7 +217,7 @@ extension PickerTheme {
 
 extension StringConfigKey {
     
-    public static let pickerOriginalImage = StringConfigKey(rawValue: "ORIGINAL_IMAGE")
+    public static let pickerOriginalImage = StringConfigKey(rawValue: "AUTO_DESTORY")
     public static let pickerSelectPhoto = StringConfigKey(rawValue: "SELECT_PHOTO")
     public static let pickerUnselectPhoto = StringConfigKey(rawValue: "UNSELECT_PHOTO")
     public static let pickerTakePhoto = StringConfigKey(rawValue: "TAKE_PHOTO")
@@ -228,7 +228,6 @@ extension StringConfigKey {
     public static let pickerFetchFailedPleaseRetry = StringConfigKey(rawValue: "FETCH_FAILED_PLEASE_RETRY")
     public static let pickerA11ySwitchAlbumTips = StringConfigKey(rawValue: "A11Y_SWITCH_ALBUM_TIPS")
     public static let pickerLimitedPhotosPermissionTips = StringConfigKey(rawValue: "LIMITED_PHOTOS_PERMISSION_TIPS")
-    public static let pickerCannotPreviewAssetInOtherAlbum = StringConfigKey(rawValue: "CANNOT_PREVIEW_ASSET_IN_OTHER_ALBUM")
 }
 
 // MARK: - Label

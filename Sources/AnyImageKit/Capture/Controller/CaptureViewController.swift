@@ -12,7 +12,7 @@ import AVFoundation
 protocol CaptureViewControllerDelegate: AnyObject {
     
     func captureDidCancel(_ capture: CaptureViewController)
-    func capture(_ capture: CaptureViewController, didOutput mediaURL: URL, type: MediaType)
+    func capture(_ capture: CaptureViewController, didOutput mediaURL: URL, type: MediaType, isFire: Bool)
 }
 
 final class CaptureViewController: AnyImageViewController {
@@ -258,7 +258,7 @@ extension CaptureViewController: CaptureDelegate {
         guard UIDevice.current.userInterfaceIdiom == .phone else {
             if let url = FileHelper.write(photoData: photoData, fileType: fileType) {
                 toolView.captureButton.stopProcessing()
-                delegate?.capture(self, didOutput: url, type: .photo)
+                delegate?.capture(self, didOutput: url, type: .photo, isFire: false)
             }
             return
         }
@@ -267,6 +267,7 @@ extension CaptureViewController: CaptureDelegate {
         guard let image = UIImage(data: photoData) else { return }
         var editorOptions = options.editorPhotoOptions
         editorOptions.enableDebugLog = options.enableDebugLog
+        editorOptions.allowUseFireImage = options.allowUseFireImage
         let controller = ImageEditorController(photo: image, options: editorOptions, delegate: self)
         present(controller, animated: false) { [weak self] in
             guard let self = self else { return }
@@ -302,7 +303,7 @@ extension CaptureViewController: RecorderDelegate {
         
         guard UIDevice.current.userInterfaceIdiom == .phone else {
             toolView.captureButton.stopProcessing()
-            delegate?.capture(self, didOutput: url, type: .video)
+            delegate?.capture(self, didOutput: url, type: .video, isFire: false)
             return
         }
         
@@ -346,7 +347,7 @@ extension CaptureViewController: ImageEditorControllerDelegate {
     }
     
     func imageEditor(_ editor: ImageEditorController, didFinishEditing result: EditorResult) {
-        delegate?.capture(self, didOutput: result.mediaURL, type: result.type)
+        delegate?.capture(self, didOutput: result.mediaURL, type: result.type, isFire: result.useFireImage)
     }
 }
 

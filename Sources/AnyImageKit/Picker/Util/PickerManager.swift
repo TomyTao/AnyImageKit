@@ -23,12 +23,10 @@ final class PickerManager {
         return selectedAssets.count == options.selectLimit
     }
     
-    var useOriginalImage: Bool = false
+    var useFireImage: Bool = false
     
     /// 已选中的资源
     private(set) var selectedAssets: [Asset] = []
-    /// The selected assets before user enter the preview controller
-    internal var lastSelectedAssets: [Asset] = []
     /// 获取失败的资源
     private var failedAssets: [Asset] = []
     /// 管理 failedAssets 队列的锁
@@ -49,7 +47,7 @@ final class PickerManager {
 extension PickerManager {
     
     func clearAll() {
-        useOriginalImage = false
+        useFireImage = false
         selectedAssets.removeAll()
         failedAssets.removeAll()
         cache.clearAll()
@@ -149,11 +147,6 @@ extension PickerManager {
         asset.state = .normal
         asset._images[.initial] = nil
         return true
-    }
-    
-    func updateAsset(_ asset: Asset) {
-        guard let idx = selectedAssets.firstIndex(of: asset) else { return }
-        selectedAssets[idx] = asset
     }
     
     func removeAllSelectedAsset() {

@@ -5,8 +5,7 @@
   Created by 蒋惠 on 2019/9/16.
   Copyright © 2019-2022 AnyImageKit.org. All rights reserved.
 */
-
-"ORIGINAL_IMAGE" = "Original image";
+"AUTO_DESTORY" = "Auto destory";
 "SELECT_PHOTO" = "Select photo";
 "UNSELECT_PHOTO" = "Unselect photo";
 "TAKE_PHOTO" = "Take photo";

@@ -265,6 +265,7 @@
 		A5F7DFCD2394A6DD006E10ED /* InputTextViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5F7DFCC2394A6DD006E10ED /* InputTextViewController.swift */; };
 		A5F7DFCF2394D5CE006E10ED /* EditorTextToolView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5F7DFCE2394D5CE006E10ED /* EditorTextToolView.swift */; };
 		A5FA4AF5239F32220007C99B /* ColorButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5FA4AF4239F32220007C99B /* ColorButton.swift */; };
+		EE510EA529C1A45B0039B5F9 /* FireButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE510EA429C1A45B0039B5F9 /* FireButton.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -589,6 +590,7 @@
 		D968DE0526C04C190056AF1D /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/Editor.strings"; sourceTree = "<group>"; };
 		D968DE0626C04C190056AF1D /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/Capture.strings"; sourceTree = "<group>"; };
 		D968DE0726C04C190056AF1D /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		EE510EA429C1A45B0039B5F9 /* FireButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FireButton.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1443,6 +1445,7 @@
 			isa = PBXGroup;
 			children = (
 				A56A3C8D2330BCB000EBFC48 /* PickerToolBar.swift */,
+				EE510EA429C1A45B0039B5F9 /* FireButton.swift */,
 				A56A3C8B2330BCA100EBFC48 /* PickerPreviewNavigationBar.swift */,
 				A5CC86C023349D4B00BCB372 /* PickerPreviewIndexView.swift */,
 				71CBF1582519E5BF00F79D19 /* PermissionLimitedView.swift */,
@@ -1685,6 +1688,7 @@
 				A0FFB24025407E86000A7A45 /* GradientView.swift in Sources */,
 				A54D09FE23CC05B00095574C /* CaptureFocusView.swift in Sources */,
 				A0A9825423A729BA00537F9D /* CaptureCircleView.swift in Sources */,
+				EE510EA529C1A45B0039B5F9 /* FireButton.swift in Sources */,
 				71B3E91A2629785C00710A7F /* CaptureAspectRatio.swift in Sources */,
 				A08DF7C423B3325A002B92EE /* CaptureViewController.swift in Sources */,
 				718DE32725996E36005C3159 /* CropLayerView.swift in Sources */,

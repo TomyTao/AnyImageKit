@@ -20,9 +20,13 @@ public struct EditorResult: Equatable {
     /// Media is edited or not
     public let isEdited: Bool
     
-    init(mediaURL: URL, type: MediaType, isEdited: Bool) {
+    ///Media is allow fire
+    public let useFireImage: Bool
+
+    init(mediaURL: URL, type: MediaType, isEdited: Bool, useFireImage: Bool) {
         self.mediaURL = mediaURL
         self.type = type
         self.isEdited = isEdited
+        self.useFireImage = useFireImage
     }
 }

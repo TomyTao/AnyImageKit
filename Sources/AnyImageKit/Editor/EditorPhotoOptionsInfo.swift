@@ -129,6 +129,10 @@ public struct EditorPhotoOptionsInfo {
     /// - Default: false
     public var enableDebugLog: Bool = false
     
+    /// Allow Use Fire Image
+    /// - Default: false
+    public var allowUseFireImage: Bool = false
+    
     public init() { }
 }
 

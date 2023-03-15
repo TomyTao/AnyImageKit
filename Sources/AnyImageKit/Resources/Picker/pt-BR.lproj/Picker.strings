@@ -5,8 +5,7 @@
   Created by Henrique Gouveia on 2021/8/8
   Copyright © 2021-2022 AnyImageKit.org. All rights reserved.
 */
-
-"ORIGINAL_IMAGE" = "Imagem original";
+"AUTO_DESTORY" = "Auto destory";
 "SELECT_PHOTO" = "Selecionar foto";
 "UNSELECT_PHOTO" = "Deselecionar foto";
 "TAKE_PHOTO" = "Tirar foto";

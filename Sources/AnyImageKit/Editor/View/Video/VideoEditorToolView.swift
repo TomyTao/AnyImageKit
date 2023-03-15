@@ -18,6 +18,12 @@ final class VideoEditorToolView: UIView {
     public weak var delegate: VideoEditorToolViewDelegate?
     private(set) var currentOption: EditorVideoToolOption?
     
+    private(set) lazy var fireButton: FireButton = {
+        let view = FireButton(frame: .zero)
+        view.label.textColor = .white
+        view.addTarget(self, action: #selector(handleClickFire), for: .touchUpInside)
+        return view
+    }()
     private(set) lazy var doneButton: UIButton = {
         let view = UIButton(type: .custom)
         view.layer.cornerRadius = 2
@@ -45,6 +51,7 @@ final class VideoEditorToolView: UIView {
     
     private func setupView() {
         addSubview(doneButton)
+        addSubview(fireButton)
         doneButton.snp.makeConstraints { maker in
             maker.centerY.equalToSuperview()
             maker.right.equalToSuperview()
@@ -72,6 +79,13 @@ final class VideoEditorToolView: UIView {
             options.theme.buttonConfiguration[.videoOptions(options.toolOptions[$0.tag])]?.configuration($0)
         }
         
+        fireButton.snp.makeConstraints { make in
+            make.height.equalTo(30)
+            make.right.equalTo(doneButton.snp.left).offset(-30)
+            make.centerY.equalTo(stackView)
+            make.left.equalTo(stackView.snp.right)
+        }
+        
         options.theme.buttonConfiguration[.done]?.configuration(doneButton)
     }
     
@@ -84,6 +98,10 @@ final class VideoEditorToolView: UIView {
         button.addTarget(self, action: #selector(optionButtonTapped(_:)), for: .touchUpInside)
         button.accessibilityLabel = options.theme[string: option.stringKey]
         return button
+    }
+    
+    @objc func handleClickFire() {
+        fireButton.isSelected.toggle()
     }
     
     private func selectButton(_ button: UIButton) {

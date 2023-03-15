@@ -11,10 +11,10 @@ import Foundation
 public struct PickerResult: Equatable {
     
     public let assets: [Asset]
-    public let useOriginalImage: Bool
+    public let useFireImage: Bool
     
-    init(assets: [Asset], useOriginalImage: Bool) {
+    init(assets: [Asset], useFireImage: Bool) {
         self.assets = assets
-        self.useOriginalImage = useOriginalImage
+        self.useFireImage = useFireImage
     }
 }
